@@ -105,3 +105,21 @@ MIT — см. [LICENSE](LICENSE).
 - [LangChain](https://github.com/langchain-ai/langchain)
 - [LangGraph](https://github.com/langchain-ai/langgraph)
 - [Qwen](https://github.com/QwenLM/Qwen2.5)
+
+## 🐳 Docker
+
+### Вариант 1 — всё в одном контейнере
+
+```bash
+docker build -t local-ai-agent .
+docker run --rm -it -v ollama-models:/home/agent/.ollama local-ai-agent
+```
+
+### Вариант 2 — docker compose (Ollama + агент отдельно)
+
+```bash
+docker compose up --build
+```
+
+Модели хранятся в именованном volume `ollama-models` — при пересборке образа
+скачивать 5 ГБ заново не нужно.
