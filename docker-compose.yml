@@ -1,0 +1,42 @@
+services:
+  ollama:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: local-ai-agent:latest
+    container_name: ollama-server
+    command: ["ollama", "serve"]        # переопределяем CMD → только сервер
+    entrypoint: ["/usr/local/bin/ollama"]  # минуем entrypoint.sh, чтобы не создавать модель
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-models:/home/agent/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    restart: unless-stopped
+
+  agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: local-ai-agent:latest
+    container_name: local-ai-agent
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+      BASE_MODEL: qwen2.5:7b
+      CUSTOM_MODEL: my-qwen
+    stdin_open: true       # -i
+    tty: true              # -t
+    volumes:
+      - ollama-models:/home/agent/.ollama   # чтобы entrypoint видел уже скачанную модель
+    # command: ["python", "agent.py"]        # по умолчанию из Dockerfile
+
+volumes:
+  ollama-models:
