@@ -1,4 +1,6 @@
-   # AI Agents for Local Use 🤖
+markdown
+![Docker](https://img.shields.io/badge/docker-ready-2496ED?logo=docker&logoColor=white)
+# AI Agents for Local Use 🤖
 
 Локальный AI‑агент на базе [Ollama](https://ollama.com) + [LangChain](https://python.langchain.com) / [LangGraph](https://langchain-ai.github.io/langgraph/), работающий **полностью офлайн**. Модель — `qwen2.5` (1.5B или 7B), кастомная сборка `my-qwen`.
 
